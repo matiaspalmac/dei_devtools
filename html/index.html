@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dei DevTools</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body data-theme="dark" style="background:transparent!important">
+    <div id="devtools" class="devtools hidden">
+        <!-- Header / Tab Bar -->
+        <div class="dt-header" id="dragHandle">
+            <div class="dt-title">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+                <span>Dei DevTools</span>
+            </div>
+            <div class="dt-controls">
+                <div class="opacity-control">
+                    <input type="range" id="opacitySlider" min="30" max="100" value="85" title="Opacidad">
+                </div>
+                <button class="dt-btn dt-minimize" id="btnMinimize" title="Minimizar">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </button>
+                <button class="dt-btn dt-close" id="btnClose" title="Cerrar (F9)">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="dt-tabs">
+            <button class="dt-tab active" data-tab="resmon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                Resmon
+            </button>
+            <button class="dt-tab" data-tab="events">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                Events
+            </button>
+            <button class="dt-tab" data-tab="entities">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg>
+                Entities
+            </button>
+            <button class="dt-tab" data-tab="player">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                Player
+            </button>
+            <button class="dt-tab" data-tab="network">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
+                Network
+            </button>
+            <button class="dt-tab" data-tab="nui">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                NUI
+            </button>
+            <button class="dt-tab" data-tab="console" id="tabConsole" style="display:none;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+                Console
+            </button>
+        </div>
+
+        <!-- Tab Panels -->
+        <div class="dt-content">
+            <!-- RESMON -->
+            <div class="dt-panel active" id="panel-resmon">
+                <div class="panel-header">
+                    <div class="panel-stat">
+                        <span class="stat-label">Server Tick</span>
+                        <span class="stat-value" id="serverTick">--</span>
+                    </div>
+                    <div class="panel-stat">
+                        <span class="stat-label">Resources</span>
+                        <span class="stat-value" id="resCount">--</span>
+                    </div>
+                </div>
+                <div class="search-bar">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="resmonSearch" placeholder="Buscar recurso...">
+                </div>
+                <div class="sort-bar">
+                    <button class="sort-btn active" data-sort="name">Nombre</button>
+                    <button class="sort-btn" data-sort="ms">Resmon (ms)</button>
+                </div>
+                <div class="scroll-list" id="resmonList"></div>
+            </div>
+
+            <!-- EVENTS -->
+            <div class="dt-panel" id="panel-events">
+                <div class="panel-header">
+                    <div class="event-controls">
+                        <button class="ctrl-btn" id="btnPause">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+                            Pausar
+                        </button>
+                        <button class="ctrl-btn" id="btnClearEvents">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                            Limpiar
+                        </button>
+                    </div>
+                </div>
+                <div class="search-bar">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="eventSearch" placeholder="Filtrar evento...">
+                </div>
+                <div class="filter-bar">
+                    <button class="filter-btn active" data-filter="all">Todos</button>
+                    <button class="filter-btn" data-filter="c2s">C &rarr; S</button>
+                    <button class="filter-btn" data-filter="s2c">S &rarr; C</button>
+                </div>
+                <div class="scroll-list" id="eventList"></div>
+                <div class="event-watch">
+                    <input type="text" id="watchEventInput" placeholder="Nombre de evento a monitorear...">
+                    <button class="ctrl-btn" id="btnWatchEvent">+ Watch</button>
+                </div>
+            </div>
+
+            <!-- ENTITIES -->
+            <div class="dt-panel" id="panel-entities">
+                <div class="panel-header entity-counts">
+                    <div class="entity-count-item">
+                        <span class="ec-label">Peds</span>
+                        <span class="ec-value" id="countPeds">0</span>
+                    </div>
+                    <div class="entity-count-item">
+                        <span class="ec-label">Vehicles</span>
+                        <span class="ec-value" id="countVehs">0</span>
+                    </div>
+                    <div class="entity-count-item">
+                        <span class="ec-label">Objects</span>
+                        <span class="ec-value" id="countObjs">0</span>
+                    </div>
+                    <div class="entity-count-item">
+                        <span class="ec-label">Pickups</span>
+                        <span class="ec-value" id="countPickups">0</span>
+                    </div>
+                    <div class="entity-count-item total">
+                        <span class="ec-label">Total</span>
+                        <span class="ec-value" id="countTotal">0</span>
+                    </div>
+                </div>
+                <div class="entity-warning hidden" id="entityWarning">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    <span>Alto conteo de entidades!</span>
+                </div>
+                <div class="raycast-btn-wrap">
+                    <button class="ctrl-btn raycast-btn" id="btnRaycast">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="22" y1="12" x2="18" y2="12"></line><line x1="6" y1="12" x2="2" y2="12"></line><line x1="12" y1="6" x2="12" y2="2"></line><line x1="12" y1="22" x2="12" y2="18"></line></svg>
+                        Raycast Inspect (R)
+                    </button>
+                </div>
+                <div class="scroll-list" id="entityList"></div>
+                <div class="entity-detail hidden" id="entityDetail"></div>
+            </div>
+
+            <!-- PLAYER -->
+            <div class="dt-panel" id="panel-player">
+                <div class="player-section">
+                    <h3 class="section-title">Posicion</h3>
+                    <div class="data-grid">
+                        <div class="data-row">
+                            <span class="data-label">X</span>
+                            <span class="data-value" id="playerX">--</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Y</span>
+                            <span class="data-value" id="playerY">--</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Z</span>
+                            <span class="data-value" id="playerZ">--</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Heading</span>
+                            <span class="data-value" id="playerHeading">--</span>
+                        </div>
+                    </div>
+                    <div class="copy-buttons">
+                        <button class="copy-btn" id="btnCopyCoords">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            Copiar vector3
+                        </button>
+                        <button class="copy-btn" id="btnCopyHeading">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            Copiar heading
+                        </button>
+                    </div>
+                </div>
+                <div class="player-section">
+                    <h3 class="section-title">Estado</h3>
+                    <div class="data-grid">
+                        <div class="data-row">
+                            <span class="data-label">Health</span>
+                            <span class="data-value" id="playerHealth">--</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Armor</span>
+                            <span class="data-value" id="playerArmor">--</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Speed</span>
+                            <span class="data-value" id="playerSpeed">--</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="player-section">
+                    <h3 class="section-title">IDs</h3>
+                    <div class="data-grid">
+                        <div class="data-row">
+                            <span class="data-label">Server ID</span>
+                            <span class="data-value" id="playerServerId">--</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Client ID</span>
+                            <span class="data-value" id="playerClientId">--</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Job</span>
+                            <span class="data-value" id="playerJob">--</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Framework</span>
+                            <span class="data-value" id="playerFramework">--</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="player-section" id="vehicleSection" style="display:none;">
+                    <h3 class="section-title">Vehiculo</h3>
+                    <div class="data-grid" id="vehicleData"></div>
+                </div>
+                <div class="player-section" id="identifiersSection">
+                    <h3 class="section-title">Identificadores</h3>
+                    <div class="data-grid" id="identifiersList"></div>
+                </div>
+            </div>
+
+            <!-- NETWORK -->
+            <div class="dt-panel" id="panel-network">
+                <div class="panel-header">
+                    <div class="panel-stat">
+                        <span class="stat-label">Ping</span>
+                        <span class="stat-value" id="netPing">--</span>
+                    </div>
+                    <div class="panel-stat">
+                        <span class="stat-label">Events/s</span>
+                        <span class="stat-value" id="netEps">--</span>
+                    </div>
+                </div>
+                <div class="net-chart-wrap">
+                    <canvas id="netChart" width="360" height="140"></canvas>
+                </div>
+                <div class="player-section">
+                    <h3 class="section-title">Detalles</h3>
+                    <div class="data-grid">
+                        <div class="data-row">
+                            <span class="data-label">Endpoint</span>
+                            <span class="data-value" id="netEndpoint">--</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Incoming</span>
+                            <span class="data-value" id="netIncoming">0</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="data-label">Outgoing</span>
+                            <span class="data-value" id="netOutgoing">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NUI -->
+            <div class="dt-panel" id="panel-nui">
+                <div class="panel-header">
+                    <div class="panel-stat">
+                        <span class="stat-label">NUI Messages</span>
+                        <span class="stat-value" id="nuiCount">0</span>
+                    </div>
+                </div>
+                <div class="search-bar">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="nuiSearch" placeholder="Filtrar por recurso...">
+                </div>
+                <div class="scroll-list" id="nuiList"></div>
+            </div>
+
+            <!-- CONSOLE -->
+            <div class="dt-panel" id="panel-console">
+                <div class="console-scope">
+                    <button class="scope-btn active" data-scope="client">Client</button>
+                    <button class="scope-btn" data-scope="server">Server</button>
+                </div>
+                <div class="console-mode">
+                    <button class="mode-btn active" data-mode="command">Comando</button>
+                    <button class="mode-btn" data-mode="lua">Lua</button>
+                </div>
+                <div class="console-output" id="consoleOutput"></div>
+                <div class="console-input-wrap">
+                    <span class="console-prompt">&gt;</span>
+                    <input type="text" id="consoleInput" placeholder="Escribir comando..." autocomplete="off">
+                    <button class="ctrl-btn" id="btnExecute">Run</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Minimized icon -->
+    <div id="devtoolsMin" class="devtools-min hidden">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+        </svg>
+    </div>
+
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

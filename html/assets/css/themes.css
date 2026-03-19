@@ -1,0 +1,85 @@
+/* ===== Dei DevTools - Theme Variables ===== */
+
+:root {
+    --glass-bg: rgba(10, 10, 15, 0.92);
+    --glass-border: rgba(255, 255, 255, 0.06);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    --glass-blur: blur(20px);
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.5);
+    --text-muted: rgba(255, 255, 255, 0.3);
+    --accent-blue: #3b82f6;
+    --accent-green: #4ade80;
+    --accent-red: #ef4444;
+    --accent-yellow: #fbbf24;
+    --accent-orange: #fb923c;
+    --accent-purple: #a78bfa;
+    --bg-hover: rgba(255, 255, 255, 0.04);
+    --bg-active: rgba(59, 130, 246, 0.15);
+    --border-subtle: rgba(255, 255, 255, 0.04);
+    --scrollbar-bg: rgba(255, 255, 255, 0.03);
+    --scrollbar-thumb: rgba(255, 255, 255, 0.1);
+    --input-bg: rgba(255, 255, 255, 0.05);
+    --badge-c2s: rgba(59, 130, 246, 0.2);
+    --badge-s2c: rgba(74, 222, 128, 0.2);
+    --badge-c2s-text: #60a5fa;
+    --badge-s2c-text: #4ade80;
+}
+
+/* ===== Themes ===== */
+body[data-theme="dark"] { /* default */ }
+
+body[data-theme="midnight"] {
+    --glass-bg: rgba(10, 15, 40, 0.92);
+    --glass-border: rgba(100, 130, 255, 0.08);
+    --glass-shadow: 0 8px 32px rgba(0, 10, 40, 0.4);
+    --accent-blue: #6366f1;
+    --bg-active: rgba(99, 102, 241, 0.15);
+    --badge-c2s: rgba(99, 102, 241, 0.2);
+    --badge-c2s-text: #a5b4fc;
+}
+
+body[data-theme="neon"] {
+    --glass-bg: rgba(0, 0, 0, 0.92);
+    --glass-border: rgba(0, 255, 136, 0.1);
+    --glass-shadow: 0 0 20px rgba(0, 255, 136, 0.08);
+    --accent-blue: #00ff88;
+    --accent-green: #00e5ff;
+    --bg-active: rgba(0, 255, 136, 0.12);
+    --badge-c2s: rgba(0, 255, 136, 0.15);
+    --badge-c2s-text: #00ff88;
+    --badge-s2c: rgba(0, 229, 255, 0.15);
+    --badge-s2c-text: #00e5ff;
+}
+body[data-theme="neon"] .dt-title span,
+body[data-theme="neon"] .dt-tab.active {
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+}
+body[data-theme="neon"] .resmon-bar-fill {
+    box-shadow: 0 0 8px currentColor;
+}
+
+body[data-theme="minimal"] {
+    --glass-bg: rgba(20, 20, 20, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.03);
+    --glass-shadow: none;
+    --glass-blur: blur(10px);
+}
+
+/* ===== Light Mode ===== */
+body.light-mode {
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    --text-primary: #1a1a1a;
+    --text-secondary: rgba(0, 0, 0, 0.5);
+    --text-muted: rgba(0, 0, 0, 0.3);
+    --bg-hover: rgba(0, 0, 0, 0.04);
+    --bg-active: rgba(59, 130, 246, 0.1);
+    --border-subtle: rgba(0, 0, 0, 0.06);
+    --scrollbar-bg: rgba(0, 0, 0, 0.03);
+    --scrollbar-thumb: rgba(0, 0, 0, 0.12);
+    --input-bg: rgba(0, 0, 0, 0.04);
+    --badge-c2s: rgba(59, 130, 246, 0.12);
+    --badge-s2c: rgba(74, 222, 128, 0.12);
+}
